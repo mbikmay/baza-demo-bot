@@ -1,0 +1,403 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --text: #172033;
+  --muted: #68758a;
+  --line: #dfe5ee;
+  --accent: #0f9f6e;
+  --accent-soft: #dff7ee;
+  --busy: #e43d30;
+  --busy-soft: #ffe5e2;
+  --shadow: 0 14px 36px rgba(20, 34, 61, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: 18px 14px 28px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.price {
+  min-width: 128px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  text-align: right;
+}
+
+.price span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.price strong {
+  display: block;
+  margin: 2px 0;
+  font-size: 17px;
+}
+
+.hint,
+.calendar,
+.summary,
+.houses,
+.total {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.hint {
+  padding: 14px;
+}
+
+.hint p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr 86px;
+  overflow: hidden;
+}
+
+.summary div {
+  padding: 12px;
+  border-right: 1px solid var(--line);
+}
+
+.summary div:last-child {
+  border-right: 0;
+}
+
+.summary span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.summary strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.calendar {
+  padding: 12px;
+}
+
+.calendar-head {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.calendar-head button {
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--text);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.calendar-head h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 19px;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.weekdays {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.day {
+  position: relative;
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.day.empty {
+  visibility: hidden;
+}
+
+.day.today {
+  border-color: #6f92c8;
+}
+
+.day.busy {
+  background: var(--busy-soft);
+  border-color: #ffb9b2;
+  color: var(--busy);
+}
+
+.day.busy::after {
+  content: "занято";
+  display: block;
+  margin-top: 1px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.day.selected,
+.day.in-range {
+  background: var(--accent-soft);
+  border-color: #8bdfbd;
+  color: #08754f;
+}
+
+.day.selected {
+  background: var(--accent);
+  color: #fff;
+}
+
+.day.past {
+  background: #eef2f7;
+  color: #a3adbc;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.legend .free {
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.legend .selected {
+  background: var(--accent);
+}
+
+.legend .busy {
+  background: var(--busy);
+}
+
+.hidden {
+  display: none;
+}
+
+.houses {
+  padding: 14px;
+}
+
+.section-title span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.section-title h2 {
+  margin: 2px 0 12px;
+  font-size: 20px;
+}
+
+.house-list {
+  display: grid;
+  gap: 10px;
+}
+
+.house-card {
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  text-align: left;
+  overflow: hidden;
+}
+
+.house-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.house-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #e9eef5;
+}
+
+.house-info {
+  padding: 13px;
+}
+
+.house-card.no-image {
+  padding: 13px;
+}
+
+.house-card.no-image .house-info {
+  padding: 0;
+}
+
+.house-card strong {
+  display: block;
+  font-size: 16px;
+}
+
+.house-card span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.house-card p {
+  margin: 8px 0 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.total {
+  padding: 14px;
+}
+
+.total span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.total strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 24px;
+}
+
+.total p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.send,
+.reset {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 800;
+}
+
+.send {
+  background: var(--accent);
+  color: #fff;
+}
+
+.send:disabled {
+  background: #b8c3d1;
+}
+
+.reset {
+  margin-top: 10px;
+  background: transparent;
+  color: var(--muted);
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .summary div:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+  }
+
+  .day {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}

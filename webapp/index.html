@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Календарь бронирования</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="./styles.css?v=7" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="top">
+        <div>
+          <p id="countryLabel" class="eyebrow">База отдыха</p>
+          <h1>Выберите даты</h1>
+        </div>
+        <div class="price">
+          <span>от</span>
+          <strong id="startPrice">...</strong>
+          <span>за сутки</span>
+        </div>
+      </section>
+
+      <section class="hint">
+        <strong>Как работает календарь</strong>
+        <p>Нажмите дату заезда, затем дату выезда. Красные дни заняты, зелёным отмечается выбранный период.</p>
+      </section>
+
+      <section class="summary">
+        <div>
+          <span>Заезд</span>
+          <strong id="checkIn">Не выбран</strong>
+        </div>
+        <div>
+          <span>Выезд</span>
+          <strong id="checkOut">Не выбран</strong>
+        </div>
+        <div>
+          <span>Ночей</span>
+          <strong id="nights">0</strong>
+        </div>
+      </section>
+
+      <section id="calendarStep" class="calendar">
+        <header class="calendar-head">
+          <button id="prev" type="button" aria-label="Предыдущий месяц">‹</button>
+          <h2 id="monthTitle"></h2>
+          <button id="next" type="button" aria-label="Следующий месяц">›</button>
+        </header>
+
+        <div class="weekdays">
+          <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+        </div>
+        <div id="days" class="days"></div>
+      </section>
+
+      <section class="legend">
+        <span><i class="free"></i>Свободно</span>
+        <span><i class="selected"></i>Выбрано</span>
+        <span><i class="busy"></i>Занято</span>
+      </section>
+
+      <section id="housesStep" class="houses hidden">
+        <div class="section-title">
+          <span>Шаг 2</span>
+          <h2>Выберите домик</h2>
+        </div>
+        <div id="houses" class="house-list"></div>
+      </section>
+
+      <section id="totalStep" class="total hidden">
+        <span>Итого</span>
+        <strong id="totalPrice">0</strong>
+        <p id="selectedHouseText">Домик не выбран</p>
+      </section>
+
+      <button id="send" class="send hidden" type="button" disabled>Продолжить бронирование</button>
+      <button id="reset" class="reset" type="button">Сбросить даты</button>
+    </main>
+
+    <script src="./script.js?v=7"></script>
+  </body>
+</html>

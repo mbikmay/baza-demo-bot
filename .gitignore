@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+
+php_bot/config.php
+php_bot/storage/
+
+.DS_Store
+Thumbs.db
