@@ -534,7 +534,6 @@ async def show_start(message: Message, state: FSMContext, country: str) -> None:
 async def show_owner_landing(message: Message, state: FSMContext, country: str) -> None:
     await state.update_data(country=country, client_path_started=False)
     await message.answer(owner_intro_text(), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
-    await message.answer("Разделы презентации также доступны в меню ниже.", reply_markup=sales_keyboard())
     schedule_auto_client_path(message, state, country)
 
 
