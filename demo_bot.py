@@ -27,7 +27,7 @@ from aiogram.types import (
 
 
 BOT_TOKEN = os.getenv("BOT_TOKEN") or os.getenv("TELEGRAM_BOT_TOKEN") or ""
-WEBAPP_URL = os.getenv("WEBAPP_URL", "")
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://tolk-club.ru/baza/")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "846207345")
 CONTACT_USERNAME = "mbikmay"
 AUTO_CLIENT_PATH_SECONDS = 300
@@ -229,6 +229,7 @@ def main_keyboard(country: str = "kz") -> ReplyKeyboardMarkup:
             [KeyboardButton(text="Цены"), KeyboardButton(text="Что есть на территории")],
             [KeyboardButton(text="Условия проживания"), KeyboardButton(text="Адрес")],
             [KeyboardButton(text="Контакты"), KeyboardButton(text="Информация для гостя")],
+            [KeyboardButton(text="Меню презентации")],
             [KeyboardButton(text="Сменить страну")],
         ]
     )
@@ -246,6 +247,22 @@ def sales_keyboard() -> ReplyKeyboardMarkup:
         resize_keyboard=True,
         one_time_keyboard=False,
         input_field_placeholder="Выберите действие",
+    )
+
+
+def sales_inline_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Протестировать бота", callback_data="sales:test")],
+            [
+                InlineKeyboardButton(text="Что решает бот", callback_data="sales:benefits"),
+                InlineKeyboardButton(text="Что можно настроить", callback_data="sales:customization"),
+            ],
+            [
+                InlineKeyboardButton(text="Пример заявки админу", callback_data="sales:example"),
+                InlineKeyboardButton(text="Связаться", callback_data="sales:contact"),
+            ],
+        ]
     )
 
 
@@ -516,7 +533,8 @@ async def show_start(message: Message, state: FSMContext, country: str) -> None:
 
 async def show_owner_landing(message: Message, state: FSMContext, country: str) -> None:
     await state.update_data(country=country, client_path_started=False)
-    await message.answer(owner_intro_text(), reply_markup=sales_keyboard(), parse_mode="HTML")
+    await message.answer(owner_intro_text(), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
+    await message.answer("Разделы презентации также доступны в меню ниже.", reply_markup=sales_keyboard())
     schedule_auto_client_path(message, state, country)
 
 
@@ -592,14 +610,36 @@ async def test_bot(message: Message, state: FSMContext) -> None:
     await show_start(message, state, country)
 
 
+@dp.callback_query(F.data == "sales:test")
+async def test_bot_inline(query: CallbackQuery, state: FSMContext) -> None:
+    country = await get_country(state)
+    cancel_auto_client_path(query.from_user.id)
+    await state.update_data(client_path_started=True)
+    await notify_owner_from_callback(query, "нажал «Протестировать бота»")
+    await show_start(query.message, state, country)
+    await query.answer()
+
+
 @dp.message(F.text == "Что решает бот")
 async def benefits(message: Message) -> None:
     await message.answer(benefits_text(), reply_markup=sales_keyboard(), parse_mode="HTML")
 
 
+@dp.callback_query(F.data == "sales:benefits")
+async def benefits_inline(query: CallbackQuery) -> None:
+    await query.message.answer(benefits_text(), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
+    await query.answer()
+
+
 @dp.message(F.text == "Что можно настроить")
 async def customization(message: Message) -> None:
     await message.answer(customization_text(), reply_markup=sales_keyboard(), parse_mode="HTML")
+
+
+@dp.callback_query(F.data == "sales:customization")
+async def customization_inline(query: CallbackQuery) -> None:
+    await query.message.answer(customization_text(), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
+    await query.answer()
 
 
 @dp.message(F.text == "Пример заявки админу")
@@ -608,11 +648,32 @@ async def admin_request_example(message: Message, state: FSMContext) -> None:
     await message.answer(admin_request_example_text(country), reply_markup=sales_keyboard(), parse_mode="HTML")
 
 
+@dp.callback_query(F.data == "sales:example")
+async def admin_request_example_inline(query: CallbackQuery, state: FSMContext) -> None:
+    country = await get_country(state)
+    await query.message.answer(admin_request_example_text(country), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
+    await query.answer()
+
+
 @dp.message(F.text == "Связаться")
 async def contact(message: Message) -> None:
     cancel_auto_client_path(message.from_user.id)
     await notify_owner(message.bot, message, "нажал «Связаться»")
     await message.answer(contact_text(), reply_markup=sales_keyboard(), parse_mode="HTML")
+
+
+@dp.callback_query(F.data == "sales:contact")
+async def contact_inline(query: CallbackQuery) -> None:
+    cancel_auto_client_path(query.from_user.id)
+    await notify_owner_from_callback(query, "нажал «Связаться»")
+    await query.message.answer(contact_text(), reply_markup=sales_inline_keyboard(), parse_mode="HTML")
+    await query.answer()
+
+
+@dp.message(F.text == "Меню презентации")
+async def owner_menu(message: Message, state: FSMContext) -> None:
+    country = await get_country(state)
+    await show_owner_landing(message, state, country)
 
 
 @dp.message(Command("book"))
